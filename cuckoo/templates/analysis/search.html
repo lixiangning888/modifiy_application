@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+    <div class="col-md-6 col-md-offset-3 center">
+        <p><img src="{{ STATIC_URL }}graphic/cuckoo.png" /></p>
+
+        <form class="form-inline" role="form" action="{% url "analysis.views.search" %}" enctype="multipart/form-data" method="post">{% csrf_token %}
+            <p class="text-muted" style="margin-top: 5px;">更多搜索条件，请点击 <a href="#help" data-toggle="collapse">高级搜索</a>.</p>
+
+            <div class="form-group">
+                <label class="sr-only" for="form_search">Search term</label>
+                <input type="text" class="form-control" id="form_search" name="search" size=50 placeholder="可直接搜索MD5, SHA1, SHA256, 或 SHA512" />
+            </div>
+            <button type="submit" class="btn btn-primary">搜索</button>
+        </form>
+        <div id="help" class="collapse">
+            <p class="text-muted" style="margin-top: 10px;">搜索MD5, SHA1, SHA256, 或 SHA512, 不需要加入前缀.</p>
+            <table class="table table-striped table-centered">
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">搜索前缀</th>
+                        <th style="text-align: center;">用法描述</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>name:</code></td>
+                        <td>搜索文件名特征</td>
+                    </tr>
+                    <tr>
+                        <td><code>type:</code></td>
+                        <td>搜索文件类型</td>
+                    </tr>
+                    <tr>
+                        <td><code>string:</code></td>
+                        <td>搜索二进制字符串</td>
+                    </tr>
+                    <tr>
+                        <td><code>ssdeep:</code></td>
+                        <td>搜索Fuzzy哈希</td>
+                    </tr>
+                    <tr>
+                        <td><code>crc32:</code></td>
+                        <td>搜索CRC32哈希</td>
+                    </tr>
+                    <tr>
+                        <td><code>imphash:</code></td>
+                        <td>搜索PE Imphash</td>
+                    </tr>
+                    <tr>
+                        <td><code>file:</code></td>
+                        <td>搜索文件分析中创建或打开的文件</td>
+                    </tr>
+                    <tr>
+                        <td><code>command:</code></td>
+                        <td>搜索文件扫描时执行的命令</td>
+                    </tr>
+                    <tr>
+                        <td><code>resolvedapi:</code></td>
+                        <td>搜索运行时调用的API</td>
+                    </tr>
+                    <tr>
+                        <td><code>key:</code></td>
+                        <td>搜索文件扫描时打开的注册表键</td>
+                    </tr>
+                    <tr>
+                        <td><code>mutex:</code></td>
+                        <td>搜索文件扫描时打开的Mutex</td>
+                    </tr>
+                    <tr>
+                        <td><code>ip:</code></td>
+                        <td>搜索连接的IP地址</td>
+                    </tr>
+                    <tr>
+                        <td><code>domain:</code></td>
+                        <td>搜索连接的域名</td>
+                    </tr>
+                    <tr>
+                        <td><code>url:</code></td>
+                        <td>搜索URL链接扫描</td>
+                    </tr>
+                    <tr>
+                        <td><code>signame:</code></td>
+                        <td>通过触发的特征规则名搜索</td>
+                    </tr>
+                    <tr>
+                        <td><code>signature:</code></td>
+                        <td>通过触发的特征描述搜索</td>
+                    </tr>
+                    <tr>
+                        <td><code>surialert:</code></td>
+                        <td>搜索Suricata提醒</td>
+                    </tr>
+                    <tr>
+                        <td><code>suritls:</code></td>
+                        <td>搜索Suricata TLS</td>
+                    </tr>
+                    <tr>
+                        <td><code>surihttp:</code></td>
+                        <td>搜索Suricata HTTP</td>
+                    </tr>
+                    <tr>
+                        <td><code>clamav:</code></td>
+                        <td>ClamAV扫描结果</td>
+                    </tr>
+                    <tr>
+                        <td><code>yaraname:</code></td>
+                        <td>搜索Yara规则名</td>
+                    </tr>
+                    <tr>
+                        <td><code>procmemyara:</code></td>
+                        <td>搜索Yara内存扫描规则</td>
+                    </tr>
+                    <tr>
+                        <td><code>virustotal:</code></td>
+                        <td>搜索Virus Total扫描结果</td>
+                    </tr>
+                    <tr>
+                        <td><code>comment:</code></td>
+                        <td>搜索评论</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% if term %}
+    <h3>Term <span class="text-info"><i>{{term}}</i></span></h3>
+{% endif %}
+{% if analyses != None %}
+    {% if analyses|length > 0 %}
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Search Results</h3>
+            </div>
+            <table class="table table-striped" style="table-layout: fixed;">
+                <thead>
+                <tr>
+                    <th width="5%">ID</th>
+                    <th width="12%">Timestamp</th>
+                    <th width="37%">Filename</th>
+                    <th width="20%">Target/MD5</th>
+                    {% if config.moloch %}
+                    <th width="5%">Moloch</th>
+                    {% endif %}
+                    {% if config.suricata %}
+                    <th width="5%">SuriAlert</th>
+                    {% endif %}
+                    {% if config.virustotal %}
+                    <th width="5%">VT</th>
+                    {% endif %}
+                    <th width="5%">MalScore</th>
+                    <th width="6%" style="text-align: right;">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for analysis in analyses %}
+                    <tr>
+                        <td>
+                            {{analysis.id}}
+                        </td>
+                        <td>
+                        {% if analysis.status == "reported" %}
+                            {{analysis.completed_on}}
+                        {% else %}
+                            <span class="muted">{{analysis.added_on}} (added on)</span>
+                        {% endif %}
+                        </td>
+                        <td>
+                        {{analysis.filename}}
+                        </td>
+                        <td style="word-wrap: break-word;">
+                            {% if analysis.status == "reported" %}
+                                <a href="{% url "analysis.views.report" analysis.id %}">
+                                {% if analysis.category == "url" %}
+                                    <span class="mono">{{analysis.target}}</span>
+                                {% else %}
+                                    <span class="mono">{{analysis.sample.md5}}</span>
+                                {% endif %}
+                                </a>
+                            {% else %}
+                                {% if analysis.category == "url" %}
+                                    <span class="mono">{{analysis.target}}</span>
+                                {% else %}
+                                    <span class="mono">{{analysis.sample.md5}}</span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% if config.moloch %}
+                        <td>
+                            {% if analysis.moloch_url %}
+                                <a href={{analysis.moloch_url}} target="_blank"><span class="mono">MOLOCH</span></a>
+                            {% else %}
+                                <span class="mono">None</span>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                        {% if config.suricata %}
+                        <td>
+                            {% if analysis.suri_alert_cnt %}
+                                <span class="mono">{{analysis.suri_alert_cnt}}</span>
+                            {% else %}
+                                <span class="mono">None</span>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                        {% if config.virustotal %}
+                        <td>
+                            {% if analysis.virustotal_summary %}
+                                <span class="mono">{{analysis.virustotal_summary}}</span>
+                            {% else %}
+                                <span class="mono">None</span>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                        <td>
+                            {% if analysis.malscore != None %}
+                                <span 
+                                {% if analysis.malscore <= 2.0 %}
+                                class="label label-success"
+                                {% elif analysis.malscore <= 6.0 %}
+                                class="label label-warning"
+                                {% else %}
+                                class="label label-danger"
+                                {% endif %}
+                                {% if analysis.malfamily %}
+                                title="{{analysis.malfamily}}"
+                                {% endif %}
+                                >{{analysis.malscore|floatformat:1}}</span>
+                            {% else %}
+                                <span class="mono">None</span>
+                            {% endif %}
+                        </td>
+                        <td style="text-align: right;">
+                            {% if analysis.status == "pending" %}
+                                <span class="text-muted">pending</span>
+                            {% elif analysis.status == "running" %}
+                                <span class="text-warning">running</span>
+                            {% elif analysis.status == "completed" %}
+                                <span class="text-info">processing</span>
+                            {% elif analysis.status == "reported" %}
+                                {% if analysis.errors %}
+                                    <span class="text-danger">
+                                {% else %}
+                                    <span class="text-success">
+                                {% endif%}
+
+                                reported</span>
+                            {% else %}
+                                <span class="text-danger">{{analysis.status}}</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="alert alert-info" style="text-align: center;"><b>No results found.</b></div>
+    {% endif %}
+{% else %}
+    {% if error %}
+        <div class="alert alert-error" style="text-align: center;"><b>{{error}}</b></div>
+    {% endif %}
+{% endif %}
+{% endblock %}

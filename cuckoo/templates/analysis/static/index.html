@@ -1,0 +1,70 @@
+<div class="tabbable tabs">
+    <ul class="nav nav-pills" style="margin-bottom: 0;">
+        <li class="active"><a href="#static_analysis_tab" data-toggle="tab">静态分析</a></li>
+        {% if analysis.info.category == "file" and analysis.static %}
+        {% if analysis.static.njrat_config or analysis.static.darkcomet_config %}
+        <li><a href="#static_ratconfig_tab" data-toggle="tab">RAT 配置</a></li>
+        {% endif %}
+        {% endif %}
+        {% if analysis.info.category == "file" %}
+        <li><a href="#static_strings_tab" data-toggle="tab">字符串</a></li>
+        {% endif %}
+        {% if config.virustotal %}
+        <li><a href="#static_antivirus_tab" data-toggle="tab">杀毒软件</a></li>
+        {% endif %}
+    </ul>
+    <div class="tab-content">
+        <div class="tab-pane fade in active" id="static_analysis_tab">
+            {% if "PE32" in analysis.target.file.type or "MS-DOS executable" in analysis.target.file.type %}
+                {% include "analysis/static/_pe32.html" %}
+            {% elif "PDF" in analysis.target.file.type %}
+                {% include "analysis/static/_pdf.html" %}
+            {% elif "Composite Document File V2 Document" in analysis.target.file.type %}
+                {% include "analysis/static/_office.html" %}
+            {% elif "Excel 2007+" in analysis.target.file.type %}
+                {% include "analysis/static/_office.html" %}
+            {% elif "PowerPoint 2007+" in analysis.target.file.type %}
+                {% include "analysis/static/_office.html" %}
+            {% elif "Word 2007+" in analysis.target.file.type %}
+                {% include "analysis/static/_office.html" %}
+            {% elif "Zip archive data" in analysis.target.file.type %}
+                {% if ".docx" in analysis.target.file.name %}
+                    {% include "analysis/static/_office.html" %}
+                {% elif ".docm" in analysis.target.file.name %}
+                    {% include "analysis/static/_office.html" %}
+                {% elif ".doc" in analysis.target.file.name %}
+                    {% include "analysis/static/_office.html" %}
+                {% elif ".xls" in analysis.target.file.name %}
+                    {% include "analysis/static/_office.html" %}
+                {% elif ".xlsx" in analysis.target.file.name %}
+                    {% include "analysis/static/_office.html" %}
+                {% elif ".ppt" in analysis.target.file.name %}
+                    {% include "analysis/static/_office.html" %}
+                {% elif ".pptx" in analysis.target.file.name %}
+                    {% include "analysis/static/_office.html" %}
+                {% else %}
+                    没有可用的静态分析.
+                {% endif %}
+            {% else %}
+                没有可用的静态分析.
+            {% endif %}
+        </div>
+        {% if analysis.info.category == "file" and analysis.static %}
+        {% if analysis.static.njrat_config or analysis.static.darkcomet_config %}
+        <div class="tab-pane fade" id="static_ratconfig_tab">
+            {% include "analysis/static/_ratconfig.html" %}
+        </div>
+        {% endif %}
+        {% endif %}
+        {% if analysis.info.category == "file" %}
+        <div class="tab-pane fade" id="static_strings_tab">
+            {% include "analysis/static/_strings.html" %}
+        </div>
+        {% endif %}
+        {% if config.virustotal %}
+        <div class="tab-pane fade" id="static_antivirus_tab">
+            {% include "analysis/static/_antivirus.html" %}
+        </div>
+        {% endif %}
+    </div>
+</div>

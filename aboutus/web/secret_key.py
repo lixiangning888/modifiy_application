@@ -1,0 +1,1 @@
+SECRET_KEY = "i32!^*+6%2)&9)8y^j+%d7dh=yk)nupl8n_r%@lnia9sjwa_wb"

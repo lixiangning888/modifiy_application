@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+div.center, p.center {
+display: block;
+float: none !important;
+margin-left: auto !important;
+margin-right: auto !important;
+text-align: center;
+}
+div.left {
+float: left !important;
+}
+div.right {
+float: right !important;
+}
+.homebutton {
+	-moz-box-shadow:inset 0px 1px 13px 1px #bbdaf7;
+	-webkit-box-shadow:inset 0px 1px 13px 1px #bbdaf7;
+	box-shadow:inset 0px 1px 13px 1px #bbdaf7;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #79bbff), color-stop(1, #378de5));
+	background:-moz-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:-webkit-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:-o-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:-ms-linear-gradient(top, #79bbff 5%, #378de5 100%);
+	background:linear-gradient(to bottom, #79bbff 5%, #378de5 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#79bbff', endColorstr='#378de5',GradientType=0);
+	background-color:#79bbff;
+	-moz-border-radius:15px;
+	-webkit-border-radius:15px;
+	border-radius:15px;
+	border:2px solid #84bbf3;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:Times New Roman;
+	font-size:28px;
+	font-weight:bold;
+	padding:19px 76px;
+	text-decoration:none;
+	text-shadow:1px 4px 0px #528ecc;
+}
+.homebutton:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #378de5), color-stop(1, #79bbff));
+	background:-moz-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:-webkit-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:-o-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:-ms-linear-gradient(top, #378de5 5%, #79bbff 100%);
+	background:linear-gradient(to bottom, #378de5 5%, #79bbff 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#378de5', endColorstr='#79bbff',GradientType=0);
+	background-color:#378de5;
+}
+.homebutton:active {
+	position:relative;
+	top:1px;
+}
+</style>
+
+<p class="center" style="margin-bottom: 10px;"><img src="{{ STATIC_URL }}graphic/cuckoo.png" /></p>
+
+<div class="alert alert-info" style="text-align: center;font-size: 22px;">
+     这是一个关于文件扫描的传说。
+</div>
+
+<!--<div class="alert alert-info" style="text-align: center;font-size: 22px;">
+    Estimating ~<b>{{report.estimate_hour}}</b> analysis per hour, <b>{{report.estimate_day}}</b> per day.
+</div>-->
+
+
+<div class="row">
+    <div class="col-xs-6">
+        <div class="right">
+        <a href="/submit_file" class="homebutton">提交文件</a>
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="left">
+        <a href="/submit_url" class="homebutton">提交链接</a>
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"> </div>
+<br>
+
+<div class="row">
+    <div class="col-xs-4">
+        <div class="jumbotron center">
+            共扫描: {{report.total_tasks}}次
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="jumbotron center">
+            文件样本: {{report.total_file}}个
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="jumbotron center">
+            链接数: {{report.total_url}}个
+        </div>
+    </div>
+</div>
+
+<!--<div class="row">
+    <div class="col-xs-6">
+        <div class="right">
+	<a href="#" class="homebutton">提交文件</a>
+        </div>
+    </div>
+    <div class="col-xs-6">
+	<div class="left">
+	<a href="#" class="homebutton">提交链接</a>
+	</div>
+    </div>
+</div>-->
+<div class="row">
+<div class="col-xs-6">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">最近的文件扫描</h3>
+    </div>
+    <table class="table table-striped" style="table-layout: fixed;">
+        <thead>
+        <tr>
+            <th>文件名</th>
+            <th>MD5</th>
+	    <th>分数</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for single in report.recent_files %}
+            <tr>
+                <td>{{ single.target.file.name }}</td>
+                <td>{{ single.target.file.md5 }}</td>
+		<td>{{ single.malscore }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+<div class="col-xs-6">
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">最近URLs扫描</h3>
+    </div>
+    <table class="table table-striped" style="table-layout: fixed;">
+        <thead>
+        <tr>
+            <th>URL</th>
+            <th>分数</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for single in report.recent_urls %}
+            <tr>
+                <td>{{ single.target.url }}</td>
+                <td>{{ single.malscore }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>
+
+</div>
+{% endblock %}

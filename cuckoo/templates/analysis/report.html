@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<script>
+$(function() {
+  //Apply only when we reload the same page
+  if (document.referrer === document.URL){
+    //for bootstrap 3 use 'shown.bs.tab' instead of 'shown' in the next line
+    $('a[data-toggle="tab"]').on('click', function (e) {
+      localStorage.setItem('lastAnalysisTab', $(e.target).attr('href'));
+    });
+
+    var lastAnalysisTab = localStorage.getItem('lastAnalysisTab');
+
+    if (lastAnalysisTab) {
+        $('a[href="'+lastAnalysisTab+'"]').click();
+    }
+  }
+});
+</script>
+<div class="row">
+    <div class="col-md-6"><p style="margin-bottom: 10px;"><img src="{{ STATIC_URL }}graphic/cuckoo.png" /></p></div>
+    <div class="col-md-6" style="text-align: right;"><a class="btn btn-primary" href="{% url "compare.views.left" analysis.info.id %}">比较分析...</a></div>
+</div>
+<ul class="nav nav-tabs">
+    <li class="active"><a href="#overview" data-toggle="tab">快速回顾</a></li>
+    {% if analysis.static %}<li><a href="#static" data-toggle="tab">静态分析</a></li>{% endif %}
+    {% if analysis.behavior.processes %}<li><a href="#behavior" data-toggle="tab" id="graph_hook">行为分析</a></li>{% endif %}
+    <li><a href="#network" data-toggle="tab">网络分析</a></li>
+    {% if analysis.dropped|length %}
+        <li><a href="#dropped" data-toggle="tab">文件信息 ({{analysis.dropped|length}})</a></li>
+    {% else %}
+        <li><a href="#dropped" data-toggle="tab">文件信息</a></li>
+    {% endif %}
+    {% if analysis.procmemory %}<li><a href="#procmemory" data-toggle="tab">进程内存</a></li>{% endif %}
+    {% if analysis.memory %}<li><a href="#memory" data-toggle="tab">内存分析</a></li>{% endif %}
+    {% if config.malheur %}<li><a href="#similar" data-toggle="tab">类似的</a></li>{% endif %}
+    <li><a href="#reports" data-toggle="tab">报告</a></li>
+    {% if settings.COMMENTS %}
+        {% if analysis.info.comments|length %}
+            <li><a href="#comments" data-toggle="tab">评论 ({{analysis.info.comments|length}})</a></li>
+        {% else %}
+            <li><a href="#comments" data-toggle="tab">评论</a></li>
+        {% endif %}
+    {% endif %}
+    <li><a href="#admin" data-toggle="tab">管理</a></li>
+</ul>
+<div class="tab-content">
+    <div class="tab-pane fade in active" id="overview">
+        {% include "analysis/overview/index.html" %}
+    </div>
+    {% if analysis.static %}
+    <div class="tab-pane fade" id="static">
+        {% include "analysis/static/index.html" %}
+    </div>
+    {% endif %}
+    {% if analysis.behavior.processes %}
+    <div class="tab-pane fade" id="behavior">
+        {% include "analysis/behavior/index.html" %}
+    </div>
+    {% endif %}
+    <div class="tab-pane fade" id="network">
+        {% include "analysis/network/index.html" %}
+    </div>
+    <div class="tab-pane fade" id="dropped">
+        {% include "analysis/dropped/index.html" %}
+    </div>
+    {% if analysis.procmemory %}
+    <div class="tab-pane fade" id="procmemory">
+        {% include "analysis/procmemory/index.html" %}
+    </div>
+    {% endif %}
+    {% if analysis.memory %}
+    <div class="tab-pane fade" id="memory">
+        {% include "analysis/memory/index.html" %}
+    </div>
+    {% endif %}
+    {% if config.malheur %}
+    <div class="tab-pane fade" id="similar">
+        {% include "analysis/similar/index.html" %}
+    </div>
+    {% endif %}
+    <div class="tab-pane fade" id="reports">
+        {% include "analysis/reports/index.html" %}
+    </div>
+    {% if settings.COMMENTS %}
+    <div class="tab-pane fade" id="comments">
+        {% include "analysis/comments/index.html" %}
+    </div>
+    {% endif %}
+    <div class="tab-pane fade" id="admin">
+        {% include "analysis/admin/index.html" %}
+    </div>
+</div>
+{% endblock %}

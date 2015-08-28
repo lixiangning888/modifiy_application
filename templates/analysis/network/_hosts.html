@@ -1,0 +1,29 @@
+<section id="hosts">
+    <h4>联网信息</h4>
+    {% if analysis.network.hosts %}
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th width="10%">直接</th>
+                <th></th>
+                <th>国家名</th>
+            </tr>
+            {% for host in analysis.network.hosts %}
+            <tr>
+                {% if host.ip|slice:":7" != "192.168" %}
+                    {% if "hostname" in host and host.hostname == "" %}
+                        <td>Y</td>
+                    {% elif "hostname" in host %}
+                        <td>N</td>
+                    {% else %}
+                        <td>N/A</td>
+                    {% endif %}
+                    <td><a href="https://www.virustotal.com/en/ip-address/{{host.ip}}/information/">{{host.ip}}</a></td>
+                    <td>{{host.country_name}}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>无联网信息.</p>
+    {% endif %}
+</section>

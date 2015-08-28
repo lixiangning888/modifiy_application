@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+div.center, p.center {
+display: block;
+float: none !important;
+margin-left: auto !important;
+margin-right: auto !important;
+text-align: center;
+}
+</style>
+
+<div class="ch-container">
+<div class="row">
+
+<div class="row">
+<div class="col-md-12 center login-header">
+<h2>欢迎来到XXX</h2>
+</div>
+</div>
+
+<div class="row">
+<div class="well col-md-5 center login-box">
+{% if form.errors %}
+<div class="alert alert-danger"> 用户名密码不正确，请重新输入。 </div>
+{% else %}
+<div class="alert alert-info"> 请输入您的用户名和密码。 </div>
+{% endif %}
+<form class="form-horizontal" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+{% csrf_token %}
+<fieldset>
+    <div class="input-group input-group-lg">
+	<span class="input-group-addon"><i class="glyphicon glyphicon-user red"></i></span>
+	<input type="text" placeholder="用户名" name="username" class="form-control">
+    </div>
+    <div class="clearfix"> </div>
+    <br>
+    <div class="input-group input-group-lg">
+	<span class="input-group-addon"><i class="glyphicon glyphicon-lock red"></i></span>
+	<input type="password" name="password" placeholder="密码" class="form-control">
+    </div>
+    <div class="clearfix"> </div>
+    <br>
+    <p class="center col-md-5">
+	<button class="btn btn-primary" type="submit">Login</button>
+    </p> 
+    <input type="hidden" name="next" value="{{ next }}" />
+</fieldset>
+</form>
+</div>
+</div>
+
+</div>
+</div>
+{% endblock %}

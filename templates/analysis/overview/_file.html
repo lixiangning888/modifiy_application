@@ -1,0 +1,71 @@
+<section id="file">
+    <h4>文件详细信息</h4>
+    <div class="panel panel-default">
+        <table class="table table-striped" style="table-layout: fixed;">
+            <tr>
+                <th style="border-top: 0; width: 15%;">文件名</th>
+                <td style="border-top: 0; word-wrap: break-word;">{{analysis.target.file.name}}</td>
+            </tr>
+            <tr>
+                <th>文件大小</th>
+                <td>{{analysis.target.file.size}} bytes</td>
+            </tr>
+            <tr>
+                <th>文件类型</th>
+                <td style="word-wrap: break-word;">{{analysis.target.file.type}}</td>
+            </tr>
+            <tr>
+                <th>MD5</th>
+                <td style="word-wrap: break-word;">{{analysis.target.file.md5}}</td>
+            </tr>
+            <tr>
+                <th>SHA1</th>
+                <td style="word-wrap: break-word;">{{analysis.target.file.sha1}}</td>
+            </tr>
+            <tr>
+                <th>SHA256</th>
+                <td style="word-wrap: break-word;">{{analysis.target.file.sha256}}</tdstyle="word-wrap:>
+            </tr>
+            <tr>
+                <th>SHA512</th>
+                <td style="word-wrap: break-word;">{{analysis.target.file.sha512}}</td>
+            </tr>
+            <tr>
+                <th>CRC32</th>
+                <td>{{analysis.target.file.crc32}}</td>
+            </tr>
+            <tr>
+                <th>Ssdeep</th>
+                <td style="word-wrap: break-word;">{{analysis.target.file.ssdeep}}</td>
+            </tr>
+            <tr>
+                <th>ClamAV</th>
+                <td>
+                {% if analysis.target.file.clamav %}
+                    {{analysis.target.file.clamav}}
+                {% else %}
+                    None matched
+                {% endif %}
+                </th>
+            </tr>
+            <tr>
+                <th>Yara</th>
+                <td>
+                {% if analysis.target.file.yara %}
+                    <ul style="margin-bottom: 0;">
+                    {% for sign in analysis.target.file.yara %}
+                        <li>{{sign.name}} - {{sign.meta.description}}</li>
+                    {% endfor %}
+                    </ul>
+                {% else %}
+                    None matched
+                {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th></th>
+                <td><a class="btn btn-primary btn-small" href="{% url "analysis.views.file" "sample" analysis.target.file_id %}">下载</a></td>
+            </tr>
+        </table>
+    </div>
+</section>

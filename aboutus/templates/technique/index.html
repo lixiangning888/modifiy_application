@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <p style="margin-bottom: 10px;"><img src="{{ STATIC_URL }}graphic/cuckoo.png" /></p>
+         <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-file"></span>恶意软件分析</a></li>
+              <li><a href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-file"></span>Cuckoo沙盒</a></li>
+              <li><a href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-file"></span>VirusTotal</a></li>
+         </ul>
+         <div class="tab-content">
+                    <div class="tab-pane fade in active" id="tab1">
+                       <p> 恶意软件 （Malware 或者 Malicious Software），通常是指计算机程序员以任意编程语言编写的被用来伤害计算机操作系统或从用户，组织或公司系统中窃取敏感数据的计算机软件。而恶意软件分析 （Malware Analysis）通常是指解析恶意软件不同的组件和研究其在主机计算机操作系统中的行为。通过恶意软件分析，我们可以了解恶意软件的结构和对计算机主机造成的影响，从而我们可以更从容的对恶意软件进行防御。</p>
+
+                       <p> 恶意软件分析通常有两种主要技术：</p>
+                       <p> 1， 静态恶意软件分析：这通常​​是指对恶意软件的静态信息进行分析，通过分解恶意软件二进制文件的不同资源和学习每个组件来完成。二进制文件可以用一个分解装置分解（逆向工程），例如IDA。机器代码可以被翻译成汇编代码从而可以被读出和被人类理解，而恶意软件分析人员也可以通过解读汇编指令，以了解恶意软件的目的，并通过静态分析找到消除恶意软件感染的办法。</p>
+                       <p> 2， 动态恶意软件分析：这通常是指观察和记录在主机上运行恶意软​​件时的行为和动态。虚拟机和沙箱被广泛地用于这种类型的分析。通过模拟一个用户主机系统，在运行中使用调试器按步骤观察恶意软件对处理器和内存，以及系统数据产生的变化，恶意软件分析人员可以了解到恶意软件的意图和可能对系统造成的伤害。</p>
+                    </div>
+                    <div class="tab-pane fade" id="tab2">
+                        <p>Cuckoo沙盒是一个开源的自动化恶意软件分析系统。它可以被用来自动运行和分析文件，并收集各种分析结果，以此来概括恶意软件在一个隔离的Windows操作系统中的行为。Cuckoo沙盒项目起源于2010年的Google Summer of Code project，由Claudio “nex” Guarnieri 创造和设计。Cuckoo沙盒项目仍在持续的开发和维护中。</p>
+
+                        <p>Cuckoo沙盒由一个主机系统（运行管理程序）和一系列客户端系统（运行虚拟机分析）组成。主机系统包含了管理各种恶意软件分析的核心组件，而客户端系统装载了可以运行和分析恶意软件的隔离环境。Cuckoo沙盒运行一个中央管理程序来协调样本程序的执行和分析，每一次分析都会被运行在一个干净和隔离的虚拟机系统。</p>
+
+                        <p>想了解更多关于Cuckoo沙盒的信息和动态，请关注：<a href="http://www.cuckoosandbox.org">Cuckoo Sandboxing</a>。  </p>
+                    </div>
+                    <div class="tab-pane fade" id="tab3">
+                        <p>VirusTotal （Google的子公司）是一个提供免费的文件和URL病毒扫描服务的网站。它与传统杀毒软件的不同之处是它通过多种反病毒引擎扫描文件，以判断文件是否被病毒, 蠕虫, 木马, 以及各类恶意软件感染。这样大大减少了杀毒软件误报或未检出病毒的概率，其检测率优于使用单一产品。目前其反病毒引擎已经多达50种以上。</p>
+
+                        <p>更多关于VirusTotal的信息， 请访问：<a href="https://www.virustotal.com">VirusTotal</a>。  </p> 
+                    </div>
+         </div>
+
+{% endblock %}

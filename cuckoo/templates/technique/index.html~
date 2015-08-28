@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <p style="margin-bottom: 10px;"><img src="{{ STATIC_URL }}graphic/cuckoo.png" /></p>
+         <ul class="nav nav-tabs">
+              <li class="active"><a href="#tab1" data-toggle="tab"><span class="glyphicon glyphicon-file"></span>Cuckoo Sandboxing</a></li>
+              <li><a href="#tab2" data-toggle="tab"><span class="glyphicon glyphicon-file"></span>Tab 2</a></li>
+              <li><a href="#tab3" data-toggle="tab"><span class="glyphicon glyphicon-file"></span>Tab 3</a></li>
+         </ul>
+         <div class="tab-content">
+                    <div class="tab-pane fade in active" id="tab1">
+                        test
+                    </div>
+                    <div class="tab-pane fade" id="tab2">
+                        <div class="input-group col-md-6">
+                            <span class="input-group-btn">
+                                <span class="btn btn-primary btn-file">
+                                      Something Here
+				</span>
+                            </span>
+                        </div>
+                    </div>
+          </div>
+
+{% endblock %}
