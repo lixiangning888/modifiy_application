@@ -767,7 +767,7 @@ def comments(request, task_id):
             }
         buf["Data"] = "".join(escape_map.get(thechar, thechar) for thechar in comment)
         buf["UserID"] = request.user.id
-        pp.pprint(request.user)
+        #pp.pprint(request.user)
         buf["UserName"] = request.user.get_username()
         curcomments.insert(0, buf)
         results_db.analysis.update({"info.id": int(task_id)},{"$set":{"info.comments":curcomments}}, upsert=False, multi=True)
