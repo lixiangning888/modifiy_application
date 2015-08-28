@@ -1,11 +1,11 @@
-<h4>ICMP traffic</h4>
+<h4>ICMP 流量</h4>
 {% if analysis.network.icmp %}
 <table class="table table-striped table-bordered" style="table-layout: fixed;">
     <tr>
-        <th>Source</th>
-        <th>Destination</th>
-        <th>ICMP Type</th>
-        <th>Data</th>
+        <th>源地址</th>
+        <th>目标地址</th>
+        <th>ICMP类型</th>
+        <th>数据</th>
     </tr>
     {% for packet in analysis.network.icmp %}
     <tr>
@@ -17,5 +17,5 @@
     {% endfor %}
 </table>
 {% else %}
-<p>No ICMP traffic performed.</p>
+<p>无ICMP流量.</p>
 {% endif %}

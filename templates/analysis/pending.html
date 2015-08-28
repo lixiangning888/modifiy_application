@@ -4,16 +4,16 @@
 
 <div class="panel panel-primary">
     <div class="panel-heading">
-        <h3 class="panel-title">Pending Tasks</h3>
+        <h3 class="panel-title">我的扫描</h3>
     </div>
     {% if tasks %}
     <table class="table table-striped" style="table-layout: fixed;">
         <thead>
         <tr>
-            <th>Timestamp</th>
-            <th>Category</th>
-            <th>Target</th>
-            <th>Status</th>
+            <th>提交时间</th>
+            <th>扫描类型</th>
+            <th>扫描目标</th>
+            <th>扫描状态</th>
         </tr>
         </thead>
         <tbody>
@@ -26,17 +26,25 @@
                     <span class="muted">{{task.added_on}} (added on)</span>
                 {% endif %}
                 </td>
-                <td>{{task.category}}</td>
+                <td>
+		{% if task.category == "file" %}
+		文件
+		{% elif task.category == "url" %}
+		URL
+		{% else %}
+                        <span class="text-danger">{{task.status}}</span>
+		{% endif %}
+		</td>
                 <td>{{task.target}}</td>
                 <td>
                     {% if task.status == "pending" %}
-                        <span class="text-muted">pending</span>
+                        <span class="text-muted">队列中</span>
                     {% elif task.status == "running" %}
-                        <span class="text-warning">running</span>
+                        <span class="text-warning">扫描中</span>
                     {% elif task.status == "completed" %}
-                        <span class="text-info">processing</span>
+                        <span class="text-info">生成报告中</span>
                     {% elif task.status == "reported" %}
-                        <span class="text-success">reported</span>
+                        <span class="text-success">已生成扫描报告</span>
                     {% else %}
                         <span class="text-danger">{{task.status}}</span>
                     {% endif %}
@@ -46,7 +54,7 @@
         </tbody>
     </table>
     {% else %}
-    <div class="panel-body">No pending tasks.</div>
+    <div class="panel-body">还没有任何扫描.</div>
     {% endif %}
         </div>
 {% endblock %}

@@ -6,10 +6,10 @@
             <div class="col-md-6">
                 <table class="table table-bordered">
                     <tr>
-                        <th>Source</th>
-                        <th>Source Port</th>
-                        <th>Destination</th>
-                        <th>Destination Port</th>
+                        <th>源地址</th>
+                        <th>源端口</th>
+                        <th>目标地址</th>
+                        <th>目标端口</th>
                     </tr>
                     {% for p in analysis.network.tcp %}
                         <tr class="connrow">
@@ -25,7 +25,7 @@
             <div class="stream col-md-6"></div>
         </div>
     {% else %}
-        <p>No TCP connections recorded.</p>
+        <p>无TCP连接纪录.</p>
     {% endif %}
 </section>
 <script type='text/javascript'>
@@ -40,7 +40,7 @@ $(function () {
 
         $.get("/analysis/{{analysis.info.id}}/pcapstream/"+$choice.val()+"/", function(data, status, xhr) {
             if (status == "error") {
-                $section.find("div.stream").html("Error loading data. Please reload the page and if the error persists contact us.");
+                $section.find("div.stream").html("数据加载出错了:-(，请尝试刷新页面，如果问题依然存在请联系我们.");
             } else {
                 var out = $("<ul class=\"tcp-flow\">");
                 var first = undefined;

@@ -41,7 +41,7 @@
                     <tbody>
                         {% for match in signature.new_data %}
                             {% if match.process.process_name %}
-                                <tr><td colspan="9" class="signature-process">进程: {{match.process.process_name}} ({{match.process.process_id}})</td></tr>
+                                <tr><td colspan="9" class="signature-process">进程: {{match.process.process_name}} (id: {{match.process.process_id}})</td></tr>
                             {% endif %}
                             {% for sign in match.signs %}
                                 <tr>

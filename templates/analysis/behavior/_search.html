@@ -17,10 +17,10 @@ $(function () {
 	<form id='search' class="form-inline" role="form" action="{% url "analysis.views.search_behavior" analysis.info.id %}">
 		{% csrf_token %}
     	<div class="form-group">
-        	<label class="sr-only" for="form_search">Search term</label>
-        	<input type="text" class="form-control" id="form_search" name="search" size=50 placeholder="Search term" />
+        	<label class="sr-only" for="form_search">搜索关键词</label>
+        	<input type="text" class="form-control" id="form_search" name="search" size=50 placeholder="搜索关键词" />
     	</div>
-		<button type="submit" class="btn btn-primary">Search</button>
+		<button type="submit" class="btn btn-primary">搜索</button>
 	</form>
 
 	<div id="search-results">

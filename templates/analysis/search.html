@@ -125,19 +125,19 @@
     </div>
 </div>
 {% if term %}
-    <h3>Term <span class="text-info"><i>{{term}}</i></span></h3>
+    <h3>搜索关键词 <span class="text-info"><i>{{term}}</i></span></h3>
 {% endif %}
 {% if analyses != None %}
     {% if analyses|length > 0 %}
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Search Results</h3>
+                <h3 class="panel-title">搜索结果</h3>
             </div>
             <table class="table table-striped" style="table-layout: fixed;">
                 <thead>
                 <tr>
                     <th width="5%">ID</th>
-                    <th width="12%">Timestamp</th>
+                    <th width="12%">时间</th>
                     <th width="37%">Filename</th>
                     <th width="20%">Target/MD5</th>
                     {% if config.moloch %}
