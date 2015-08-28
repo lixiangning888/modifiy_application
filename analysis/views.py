@@ -36,6 +36,7 @@ from lib.cuckoo.common.constants import CUCKOO_ROOT
 import modules.processing.network as network
 
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 import pprint
 pp = pprint.PrettyPrinter()
@@ -767,7 +768,7 @@ def comments(request, task_id):
         buf["Data"] = "".join(escape_map.get(thechar, thechar) for thechar in comment)
         buf["UserID"] = request.user.id
         pp.pprint(request.user)
-        #buf["UserName"] = 
+        buf["UserName"] = request.user.get_username()
         curcomments.insert(0, buf)
         results_db.analysis.update({"info.id": int(task_id)},{"$set":{"info.comments":curcomments}}, upsert=False, multi=True)
         encrpt_task_id = until.encrpt(task_id)
