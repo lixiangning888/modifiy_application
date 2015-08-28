@@ -763,6 +763,7 @@ def comments(request, task_id):
             }
         buf["Data"] = "".join(escape_map.get(thechar, thechar) for thechar in comment)
         buf["UserID"] = request.user.id
+        buf["UserName"] = request.user.name
         curcomments.insert(0, buf)
         results_db.analysis.update({"info.id": int(task_id)},{"$set":{"info.comments":curcomments}}, upsert=False, multi=True)
         encrpt_task_id = until.encrpt(task_id)
