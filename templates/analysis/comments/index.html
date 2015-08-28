@@ -14,7 +14,17 @@
 {% endif %}
 {% if analysis.info.comments %}
 {% for comment in analysis.info.comments %}
-<div class="alert alert-info"><b>[{{comment.Timestamp}}]</b><br />{{comment.Data|safe}}</div>
+<div class="alert alert-info">
+	<b>
+	{% if comment.UserName %}
+		{{comment.UserName}}
+	{% else %}
+		 匿名用户
+	{% endif %}
+	发表于
+	[{{comment.Timestamp}}]</b>
+
+	<br />{{comment.Data|safe}}</div>
 {% endfor %}
 {% else %}
 <div class="alert alert-info center">暂时还没有评论。</div>
