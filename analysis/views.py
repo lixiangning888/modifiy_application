@@ -339,6 +339,7 @@ def report(request, task_id):
     print "fucking task_id:" + task_id
     #if task_id != "pending":
     decrpt_task_id = until.decrpt(task_id)
+    print "decrpt_task_id:" + decrpt_task_id
     report = results_db.analysis.find_one({"info.id": int(decrpt_task_id)}, sort=[("_id", pymongo.DESCENDING)])
     if not report:
         return render_to_response("error.html",
