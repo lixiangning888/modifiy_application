@@ -1,5 +1,5 @@
 {% if analysis.network.pcap_id %}
-<div class="alert alert-info center"><a class="btn btn-primary btn-small" href="{% url "analysis.views.file" "pcap" analysis.network.pcap_id %}">Download PCAP</a></div>
+<div class="alert alert-info center"><a class="btn btn-primary btn-small" href="{% url "analysis.views.file" "pcap" analysis.network.pcap_id %}">下载PCAP包</a></div>
 {% endif %}
 <div class="tabbable tabs">
     <ul class="nav nav-pills" style="margin-bottom: 0;">
@@ -11,13 +11,13 @@
         <li><a href="#network_irc_tab" data-toggle="tab">IRC ({{ analysis.network.irc|length }})</a></li>
         <li><a href="#network_icmp_tab" data-toggle="tab">ICMP ({{ analysis.network.icmp|length }})</a></li>
         {% if config.cif %}
-        <li><a href="#network_cif_tab" data-toggle="tab">CIF Results ({{ analysis.cif|length }})</a></li>
+        <li><a href="#network_cif_tab" data-toggle="tab">CIF 报告 ({{ analysis.cif|length }})</a></li>
         {% endif %}
         {% if config.suricata %}
-        <li><a href="#network_suri_alerts_tab" data-toggle="tab">Suricata Alerts ({{ analysis.suricata.alerts|length }})</a></li>
+        <li><a href="#network_suri_alerts_tab" data-toggle="tab">Suricata 警报 ({{ analysis.suricata.alerts|length }})</a></li>
         <li><a href="#network_suri_tls_tab" data-toggle="tab">Suricata TLS ({{ analysis.suricata.tls|length }})</a></li>
         <li><a href="#network_suri_http_tab" data-toggle="tab">Suricata HTTP ({{ analysis.suricata.http|length }})</a></li>
-        <li><a href="#network_suri_files" data-toggle="tab">Suricata Files ({{ analysis.suricata.files|length }})</a></li>
+        <li><a href="#network_suri_files" data-toggle="tab">Suricata 文件 ({{ analysis.suricata.files|length }})</a></li>
         {% endif %}
     </ul>
     <div class="tab-content">

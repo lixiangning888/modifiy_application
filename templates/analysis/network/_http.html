@@ -1,9 +1,9 @@
-<h4>HTTP Requests</h4>
+<h4>HTTP 请求</h4>
 {% if analysis.network.http %}
 <table class="table table-striped table-bordered" style="table-layout: fixed;">
     <tr>
         <th>URI</th>
-        <th>Data</th>
+        <th>HTTP数据</th>
     </tr>
     {% for request in analysis.network.http %}
     <tr>
@@ -13,5 +13,5 @@
     {% endfor %}
 </table>
 {% else %}
-<p>No HTTP requests performed.</p>
+<p>无HTTP请求.</p>
 {% endif %}

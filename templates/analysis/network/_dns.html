@@ -1,11 +1,11 @@
 <section id="domains">
-    <h4>DNS</h4>
+    <h4>域名解析</h4>
     {% if analysis.network.dns %}
         <table class="table table-striped table-bordered">
             <tr>
                 <th>域名</th>
                 <th>响应</th>
-                <th>Post-Analysis Lookup</th>
+                <th>Post-Analysis查询</th>
             </tr>
             {% for p in analysis.network.dns %}
                 <tr>

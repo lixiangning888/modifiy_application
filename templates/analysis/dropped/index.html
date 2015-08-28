@@ -3,11 +3,11 @@
         <div class="panel panel-default">
             <table class="table table-striped" style="table-layout: fixed;">
                 <tr>
-                    <th style="border-top: 0; width: 15%;">File name</th>
+                    <th style="border-top: 0; width: 15%;">文件名</th>
                     <td style="border-top: 0; word-wrap: break-word;"><b>{{file.name}}</b></td>
                 </tr>
                 <tr>
-                    <th>Associated Filenames</th>
+                    <th>相关文件</th>
                     <td>
                         {% for path in file.guest_paths %}
                             <div>{{path}}</div>
@@ -15,11 +15,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <th>File Size</th>
-                    <td>{{file.size}} bytes</td>
+                    <th>文件大小</th>
+                    <td>{{file.size}} 字节</td>
                 </tr>
                 <tr>
-                    <th>File Type</th>
+                    <th>文件类型</th>
                     <td style="word-wrap: break-word;">{{file.type}}</td>
                 </tr>
                 <tr>
@@ -57,20 +57,20 @@
                         {% endfor %}
                         </ul>
                     {% else %}
-                        None matched
+                        无匹配
                     {% endif %}
                     </td>
                 </tr>
                 <tr>
                     <th>VirusTotal</th>
-                    <td><a href="https://www.virustotal.com/en/file/{{file.sha256}}/analysis/">Search for Analysis</a></td>
+                    <td><a href="https://www.virustotal.com/en/file/{{file.sha256}}/analysis/">搜索相关分析</a></td>
                 </tr>
                 {% if file.object_id %}
                 <tr>
                     <th></th>
-                    <td><a href="{% url "analysis.views.file" "dropped" file.object_id %}" class="btn btn-primary btn-small">Download</a>
+                    <td><a href="{% url "analysis.views.file" "dropped" file.object_id %}" class="btn btn-primary btn-small">下载</a>
                         {% if file.data %}
-                        &emsp;<a class="btn btn-primary btn-small" data-toggle="collapse" data-target="#{{file.object_id}}">Display Text</a>
+                        &emsp;<a class="btn btn-primary btn-small" data-toggle="collapse" data-target="#{{file.object_id}}">显示文本</a>
                         {% endif %}
                     </td>
                 </tr>
@@ -84,5 +84,5 @@
         </div>
     {% endfor %}
 {% else %}
-    <div class="alert alert-info"><b>Sorry!</b> No dropped files.</div>
+    <div class="alert alert-info"><b>抱歉!</b> 没有任何文件投放。</div>
 {% endif %}

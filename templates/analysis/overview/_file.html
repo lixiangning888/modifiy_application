@@ -8,7 +8,7 @@
             </tr>
             <tr>
                 <th>文件大小</th>
-                <td>{{analysis.target.file.size}} bytes</td>
+                <td>{{analysis.target.file.size}} 字节</td>
             </tr>
             <tr>
                 <th>文件类型</th>
@@ -44,7 +44,7 @@
                 {% if analysis.target.file.clamav %}
                     {{analysis.target.file.clamav}}
                 {% else %}
-                    None matched
+                    无匹配
                 {% endif %}
                 </th>
             </tr>
@@ -58,13 +58,13 @@
                     {% endfor %}
                     </ul>
                 {% else %}
-                    None matched
+                    无匹配
                 {% endif %}
                 </td>
             </tr>
             <tr>
                 <th></th>
-                <td><a class="btn btn-primary btn-small" href="{% url "analysis.views.file" "sample" analysis.target.file_id %}">下载</a></td>
+                <td><a class="btn btn-primary btn-small" href="{% url "analysis.views.file" "sample" analysis.target.file_id %}">样本下载</a></td>
             </tr>
         </table>
     </div>

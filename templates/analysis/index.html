@@ -39,9 +39,9 @@
                     <th width="5%">SuriAlert</th>
                     {% endif %}
                     {% if config.virustotal %}
-                    <th width="5%">VT</th>
+                    <th width="5%">反病毒引擎</th>
                     {% endif %}
-                    <th width="5%">MalScore</th>
+                    <th width="5%">魔盾分数</th>
                     <!--<th width="6%" style="text-align: right;">状态</th>-->
                 </tr>
                 </thead>
@@ -90,7 +90,7 @@
                             {% if analysis.virustotal_summary %}
                                 <span class="mono">{{analysis.virustotal_summary}}</span>
                             {% else %}
-                                  <span class="mono">None</span>
+                                  <span class="mono">无结果</span>
                             {% endif %}
                         </td>
                         {% endif %}
@@ -109,7 +109,7 @@
                                 {% endif %}
                                 >{{analysis.malscore|floatformat:1}}</span>
                             {% else %}
-                                <span class="mono">None</span>
+                                <span class="mono">无分数</span>
                             {% endif %}
                         </td>
 <!--                        <td style="text-align: right;">
@@ -168,7 +168,7 @@
     {% endif %}
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">最近的URLs扫描</h3>
+                <h3 class="panel-title">最近的URL扫描</h3>
             </div>
             {% if urls %}
             <table class="table table-striped" style="table-layout: fixed;">
@@ -182,7 +182,7 @@
                     {% if config.suricata %}
                     <th width="5%">SuriAlert</th>
                     {% endif %}
-                    <th width="5%">MalScore</th>
+                    <th width="5%">魔盾分数</th>
                     <!--<th width="7%" style="text-align: right;">状态</th>-->
                 </tr>
                 </thead>
@@ -238,7 +238,7 @@
                                 {% endif %}
                                 >{{analysis.malscore|floatformat:1}}</span>
                             {% else %}
-                                <span class="mono">None</span>
+                                <span class="mono">无分数</span>
                             {% endif %}
                         </td>
 <!--                        <td style="text-align: right;">
@@ -259,7 +259,7 @@
                 </tbody>
             </table>
             {% else %}
-            <div class="panel-body">暂无分析过的URLs.</div>
+            <div class="panel-body">暂无分析过的URL.</div>
             {% endif %}
         </div>
     {% if paging.show_url_next == "show" or paging.show_url_prev == "show" %}

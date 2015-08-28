@@ -22,19 +22,19 @@ $(function() {
     <div class="col-md-6" style="text-align: right;"><a class="btn btn-primary" href="{% url "compare.views.left" analysis.info.base64id %}">比较分析...</a></div>
 </div>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="#overview" data-toggle="tab">快速回顾</a></li>
+    <li class="active"><a href="#overview" data-toggle="tab">魔盾安全扫描报告</a></li>
     {% if analysis.static %}<li><a href="#static" data-toggle="tab">静态分析</a></li>{% endif %}
     {% if analysis.behavior.processes %}<li><a href="#behavior" data-toggle="tab" id="graph_hook">行为分析</a></li>{% endif %}
     <li><a href="#network" data-toggle="tab">网络分析</a></li>
     {% if analysis.dropped|length %}
-        <li><a href="#dropped" data-toggle="tab">文件信息 ({{analysis.dropped|length}})</a></li>
+        <li><a href="#dropped" data-toggle="tab">投放文件 ({{analysis.dropped|length}})</a></li>
     {% else %}
-        <li><a href="#dropped" data-toggle="tab">文件信息</a></li>
+        <li><a href="#dropped" data-toggle="tab">投放文件</a></li>
     {% endif %}
     {% if analysis.procmemory %}<li><a href="#procmemory" data-toggle="tab">进程内存</a></li>{% endif %}
     {% if analysis.memory %}<li><a href="#memory" data-toggle="tab">内存分析</a></li>{% endif %}
     {% if config.malheur %}<li><a href="#similar" data-toggle="tab">类似的</a></li>{% endif %}
-    <li><a href="#reports" data-toggle="tab">报告</a></li>
+    <li><a href="#reports" data-toggle="tab">报告下载</a></li>
     {% if settings.COMMENTS %}
         {% if analysis.info.comments|length %}
             <li><a href="#comments" data-toggle="tab">评论 ({{analysis.info.comments|length}})</a></li>
