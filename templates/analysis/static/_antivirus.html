@@ -2,11 +2,11 @@
     {% if analysis.virustotal and analysis.virustotal.response_code %}
     <table class="table table-striped table-bordered">
         <tr>
-            <th>Antivirus</th>
+            <th>反病毒引擎/厂商</th>
             {% if analysis.info.category == "file" %}
-                <th>Signature</th>
+                <th>病毒名/规则匹配</th>
             {% else %}
-                <th>Result</th>
+                <th>结果</th>
             {% endif %}
         </tr>
         {% for av, values in analysis.virustotal.scans.items %}
@@ -15,7 +15,7 @@
             <td>
                 {% if analysis.info.category == "file" %}
                     {% if not values.result %}
-                        <span class="text-muted">Clean</span>
+                        <span class="text-muted">未发现病毒</span>
                     {% else %}
                         <span class="text-danger">{{values.result}}</span>
                     {% endif %}
@@ -33,6 +33,6 @@
         {% endfor %}
     </table>
     {% else %}
-    No antivirus signatures available.
+    没有杀毒软件扫描信息.
     {% endif %}
 </section>

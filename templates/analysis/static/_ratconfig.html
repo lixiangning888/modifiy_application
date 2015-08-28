@@ -2,12 +2,12 @@
     {% if analysis.static %}
         {% if analysis.static.darkcomet_config or analysis.static.njrat_config %}
             <div>
-                <h4>RAT Configuration</h4>
+                <h4>RAT 配置</h4>
                 <div id="rat_configuration">
                     <table class="table table-striped table-bordered" style="table-layout: fixed;">
                         {% if analysis.static.darkcomet_config %}
                             <tr>
-                                <th style="width: 15%;">Name</th>
+                                <th style="width: 15%;">名称</th>
                                 <td>DarkComet</td>
                             </tr>
                             {% for key, value in analysis.static.darkcomet_config.iteritems %}
@@ -33,6 +33,6 @@
             </div>
         {% endif %}
     {% else %}
-        Nothing to display.
+        没有信息显示.
     {% endif %}
 </section>

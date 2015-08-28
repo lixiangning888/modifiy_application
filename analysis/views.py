@@ -1,4 +1,4 @@
-﻿# Copyright (C) 2010-2015 Cuckoo Foundation.
+# Copyright (C) 2010-2015 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -778,4 +778,3 @@ def comments(request, task_id):
         return render_to_response("error.html",
                                   {"error": "Invalid Method"},
                                   context_instance=RequestContext(request))
-

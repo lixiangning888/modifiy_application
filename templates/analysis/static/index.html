@@ -1,6 +1,6 @@
 <div class="tabbable tabs">
     <ul class="nav nav-pills" style="margin-bottom: 0;">
-        <li class="active"><a href="#static_analysis_tab" data-toggle="tab">静态分析</a></li>
+        <li class="active"><a href="#static_analysis_tab" data-toggle="tab">静态文件分析</a></li>
         {% if analysis.info.category == "file" and analysis.static %}
         {% if analysis.static.njrat_config or analysis.static.darkcomet_config %}
         <li><a href="#static_ratconfig_tab" data-toggle="tab">RAT 配置</a></li>
