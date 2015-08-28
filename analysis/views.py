@@ -37,6 +37,9 @@ import modules.processing.network as network
 
 from django.contrib.auth.decorators import login_required
 
+import pprint
+pp = pprint.PrettyPrinter()
+
 results_db = pymongo.MongoClient(settings.MONGO_HOST, settings.MONGO_PORT)[settings.MONGO_DB]
 fs = GridFS(results_db)
 
