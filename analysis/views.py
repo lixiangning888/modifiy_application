@@ -183,9 +183,14 @@ def pending(request):
 
     pending = []
     for task in tasks:
+        pp.pprint(task)
         if not bool(re.search(r'^http', task.target)):
            task.target = task.target.split("/")[-1]
-        pending.append(task.to_dict())
+        task.base64 = until.encrpt(task.id)
+        aa = task.to_dict()
+        aa["base64"] = until.encrpt(aa["id"])
+        pp.pprint(aa)
+        pending.append(aa)
 
     return render_to_response("analysis/pending.html",
                               {"tasks": pending},

@@ -35,7 +35,17 @@
                         <span class="text-danger">{{task.status}}</span>
 		{% endif %}
 		</td>
-                <td>{{task.target}}</td>
+                <td>
+	        {% if task.status == "reported" %}
+		   <a href="{% url "analysis.views.report" task.base64 %}">
+		      {{task.target}}
+                   </a>
+                {% else %}
+                   <a href="{% url "submission.views.status" task.base64 %}">
+                      {{task.target}}
+		   </a>
+		{% endif %}
+		</td>
                 <td>
                     {% if task.status == "pending" %}
                         <span class="text-muted">队列中</span>
