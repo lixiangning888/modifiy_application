@@ -10,26 +10,26 @@ $(function () {
 
 <div class="row">
     <div class="col-md-6" style="border-right: 1px dashed #ddd;">
-        <h2 style="text-align: center;">Analysis 1</h2>
+        <h2 style="text-align: center;">扫描结果 1</h2>
 
         {% include "compare/_info.html" with record=left %}
 
         <div class="col-md-8">
-            <h4>Execution Graph</h4>
+            <h4>扫描状况图</h4>
 
-            <p>This graph gives you an abstracted overview of the execution of the analyzer file. More specifically it represents the percentage of occurrences of behavioral events classified by category: the bigger the colored block, the higher is the count of events for the respective category performed by the analyzed malware</p>
-            <p>Comparing two graphs from different analyses can give you help estimate how much the behavior of the two files differ.</p>
-            <p>Following are the colored categories:</p>
+            <p>此图表为您描述魔盾安全扫描对文件分析执行状况的概要。具体来说它说明了样本文件执行过程中按类别划分各行为事件所占的百分比：某一色块在图示中的比例越大，该色块所代表的行为事件在魔盾安全扫描中出现的次数越多。</p> 
+            <p>对比两次扫描的图表概要可以帮助您评估两次扫描中文件行为的不同。</p>
+            <p>以下为以不同颜色表示的行为事件：</p>
 
             <p style="text-align: center;">
-                <span class="badge registry" style="color:black;">registry</span>
-                <span class="badge filesystem" style="color:black;">filesystem</span>
-                <span class="badge system" style="color:black;">system</span>
-                <span class="badge network" style="color:black;">network</span>                
-                <span class="badge process" style="color:black;">process</span>
-                <span class="badge services" style="color:black;">services</span>
-                <span class="badge synchronization" style="color:black;">synchronization</span>
-                <span class="badge windows" style="color:black;">windows</span>
+                <span class="badge registry" style="color:black;">注册表</span>
+                <span class="badge filesystem" style="color:black;">文件系统</span>
+                <span class="badge system" style="color:black;">系统</span>
+                <span class="badge network" style="color:black;">网络</span>                
+                <span class="badge process" style="color:black;">进程</span>
+                <span class="badge services" style="color:black;">服务</span>
+                <span class="badge synchronization" style="color:black;">同步</span>
+                <span class="badge windows" style="color:black;">窗口</span>
             </p>
         </div>
 
@@ -42,7 +42,7 @@ $(function () {
         </div>
     </div>
     <div class="col-md-6">
-        <h2 style="text-align: center;">Analysis 2</h2>
+        <h2 style="text-align: center;">扫描结果 2</h2>
 
         {% include "compare/_info.html" with record=right %}
 

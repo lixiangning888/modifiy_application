@@ -1,8 +1,8 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta charset="utf-8">
-<title>Cuckoo Sandbox</title>
+<title>魔盾安全扫描</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Cuckoo Sandbox">
 <meta name="author" content="Cuckoo Sandbox">
@@ -57,9 +57,9 @@
             <li class="dropdown">
                 <a id="user_dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" href="#">{{ user }}</a>
                 <ul class="dropdown-menu" aria-labelledby="user_dropdown">
-                    <li><a href="{% url "analysis.views.pending" %}">我的扫描</a></li>
+                    <li><a href="{% url "account.views.profile" %}">我的信息</a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="{% url "account.views.profile" %}">用户信息</a></li>
+                    <li><a href="{% url "analysis.views.pending" %}">我的扫描</a></li>
                 </ul>
             </li>
             <li> <a href="{% url 'django.contrib.auth.views.logout' %}"> 退出</a> </li>

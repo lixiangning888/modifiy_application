@@ -8,5 +8,5 @@ urlpatterns = patterns("",
     url(r"^$", "submission.views.index"),
     url(r"^submit_file/$", "submission.views.submit_file"),
     url(r"^submit_url/$", "submission.views.submit_url"),
-    url(r"status/(?P<task_id>\w+)/$", "submission.views.status"),
+    url(r"status/(?P<task_id>[\w=]+)/$", "submission.views.status"),
 )

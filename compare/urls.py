@@ -5,7 +5,7 @@
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns("",
-    url(r"^(?P<left_id>\w+)/$", "compare.views.left"),
-    url(r"^(?P<left_id>\w+)/(?P<right_id>\w+)/$", "compare.views.both"),
-    url(r"^(?P<left_id>\w+)/(?P<right_hash>\w+)/$", "compare.views.hash"),
+    url(r"^(?P<left_id>[\w=]+)/$", "compare.views.left"),
+    url(r"^(?P<left_id>[\w=]+)/(?P<right_id>[\w=]+)/$", "compare.views.both"),
+    url(r"^(?P<left_id>[\w=]+)/(?P<right_hash>[\w=]+)/$", "compare.views.hash"),
 )
