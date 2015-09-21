@@ -157,9 +157,6 @@
                 {% for analysis in analyses %}
                     <tr>
                         <td>
-                            {{analysis.id}}
-                        </td>
-                        <td>
                         {% if analysis.status == "reported" %}
                             {{analysis.completed_on}}
                         {% else %}
@@ -171,7 +168,7 @@
                         </td>
                         <td style="word-wrap: break-word;">
                             {% if analysis.status == "reported" %}
-                                <a href="{% url "analysis.views.report" analysis.id %}">
+                                <a href="{% url "analysis.views.report" analysis.base64 %}">
                                 {% if analysis.category == "url" %}
                                     <span class="mono">{{analysis.target}}</span>
                                 {% else %}

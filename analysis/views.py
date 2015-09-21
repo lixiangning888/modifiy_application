@@ -603,6 +603,9 @@ def search(request):
                 continue
 
             new = new.to_dict()
+	    
+	    if result["info"]["id"]:
+		new["base64"] = until.encrpt(result["info"]["id"])	
 
             if result["info"]["category"] == "file":
                 if new["sample_id"]:
