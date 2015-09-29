@@ -8,13 +8,13 @@ import sys
 import requests
 import tempfile
 import random
+import json
 
 from django.conf import settings
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.http import HttpResponse
 from web import until
-print sys.path
-
 
 sys.path.append(settings.CUCKOO_PATH)
 
@@ -25,6 +25,9 @@ from lib.cuckoo.core.database import Database
 
 import pprint
 pp = pprint.PrettyPrinter()
+
+import pymongo
+results_db = pymongo.MongoClient(settings.MONGO_HOST, settings.MONGO_PORT)[settings.MONGO_DB]
 
 def force_int(value):
     try:
@@ -479,11 +482,7 @@ def submit_file(request):
             user_id = 1
         else:
             user_id = request.user.id
-
-#        print "aaaaaaaaaaaaaaaaaaaaaaaaaa"
-#        pp.pprint(request.user.id)
-#        print "aaaaaaaaaaaaaaaaaaaaaaaaaa"
-#        sys.exit(0)
+        
         tags = request.POST.get("tags", None)
 
         if request.POST.get("free"):
@@ -532,6 +531,7 @@ def submit_file(request):
             task_machines.append(machine)
 
         if "sample" in request.FILES:
+
             for sample in request.FILES.getlist("sample"):
                 if sample.size == 0:
                     return render_to_response("error.html",
@@ -546,28 +546,51 @@ def submit_file(request):
                 # let it persist between reboot (if user like to configure it in that way).
                 path = store_temp_file(sample.read(),
                                        sample.name)
-    
-                for entry in task_machines:
-                    task_ids_new = db.demux_sample_and_add_to_db(file_path=path, package=package, timeout=timeout, options=options, priority=priority,
+
+                currentMD5 = until.getBigFileMD5(path)
+
+                provious_analysis = results_db.analysis.find({"target.file.md5": currentMD5}).sort([["_id", -1]])
+
+                task = []
+
+                for single in provious_analysis:
+                    #pp.pprint(single)
+                    single["info"]["base64"] = until.encrpt(single["info"]["id"])
+                    single["info"]["filename"] = single["target"]["file"]["name"]
+                    pp.pprint(single["info"])
+                    task.append(single["info"])
+
+                second_post = json.dumps({"file_path":path,"package":package,"timeout":timeout,"options":options,"machine":"First Available","priority":priority,"custom":custom,"memory":memory,"enforce_timeout":enforce_timeout,"tags":tags,"clock":clock,"user_status":user_status,"user_id":user_id}, sort_keys=True)
+                pp.pprint(second_post)
+
+                if provious_analysis.count()>=1:
+                   return render_to_response("submission/ShowSimilar.html",
+                          {"tasks" : task, "params" : second_post},
+                          context_instance=RequestContext(request))
+                else:
+                    #tempfilePath = request.POST.get("file_path", "")
+                    for entry in task_machines:
+                        task_ids_new = db.demux_sample_and_add_to_db(file_path=path, package=package, timeout=timeout, options=options, priority=priority,
                                                                  machine=entry, custom=custom, memory=memory, enforce_timeout=enforce_timeout, tags=tags, clock=clock, user_status=user_status, user_id=user_id)
-                    #pp.pprint(task_ids_new)
+                    pp.pprint(task_ids_new)
                     final_task_ids=[]
                     for taskId in task_ids_new:
                         final_task_ids.append(until.encrpt(taskId))
                     task_ids.extend(final_task_ids)
 
-        tasks_count = len(task_ids)
-        pp.pprint(task_ids)
+                    tasks_count = len(task_ids)
+                    pp.pprint(task_ids)
 
-        if tasks_count > 0:
-            return render_to_response("submission/complete.html",
-                                      {"tasks" : task_ids,
-                                       "tasks_count" : tasks_count},
-                                      context_instance=RequestContext(request))
-        else:
-            return render_to_response("error.html",
-                                      {"error": "Error adding task to Cuckoo's database."},
-                                      context_instance=RequestContext(request))
+                    if tasks_count > 0:
+
+                        return render_to_response("submission/complete.html",
+                                                  {"tasks" : task_ids,
+                                                   "tasks_count" : tasks_count},
+                                                  context_instance=RequestContext(request))
+                    else:
+                        return render_to_response("error.html",
+                                                  {"error": "Error adding task to Cuckoo's database."},
+                                                  context_instance=RequestContext(request))
     else:
         enabledconf = dict()
         enabledconf["vt"] = settings.VTDL_ENABLED
@@ -623,6 +646,101 @@ def submit_file(request):
                                    "gateways": settings.GATEWAYS,
                                    "config": enabledconf},
                                   context_instance=RequestContext(request))
+
+
+def ajax_submit_file(request):
+    if request.method == "POST":
+        package = request.POST.get("package", "")
+        timeout = min(force_int(request.POST.get("timeout")), 60 * 60 * 24)
+        options = request.POST.get("options", "")
+        priority = force_int(request.POST.get("priority"))
+        machine = request.POST.get("machine", "")
+        gateway = request.POST.get("gateway", None)
+        clock = request.POST.get("clock", None)
+        custom = request.POST.get("custom", "")
+        memory = bool(request.POST.get("memory", False))
+        enforce_timeout = bool(request.POST.get("enforce_timeout", False))
+        status = bool(request.POST.get("user_status", False))
+        if not status:
+            user_status=0
+        else:
+            user_status=1
+
+        if request.user.id==None:
+            user_id = 1
+        else:
+            user_id = request.user.id
+        
+        tags = request.POST.get("tags", None)
+
+        if request.POST.get("free"):
+            if options:
+                options += ","
+            options += "free=yes"
+
+        if request.POST.get("nohuman"):
+            if options:
+                options += ","
+            options += "nohuman=yes"
+
+        if request.POST.get("tor"):
+            if options:
+                options += ","
+            options += "tor=yes"
+
+        if request.POST.get("process_memory"):
+            if options:
+                options += ","
+            options += "procmemdump=yes"
+
+        if request.POST.get("kernel_analysis"):
+            if options:
+                options += ","
+            options += "kernel_analysis=yes"   
+
+        if gateway and gateway in settings.GATEWAYS:
+            if "," in settings.GATEWAYS[gateway]:
+                tgateway = random.choice(settings.GATEWAYS[gateway].split(","))
+                ngateway = settings.GATEWAYS[tgateway]
+            else:
+                ngateway = settings.GATEWAYS[gateway]
+            if options:
+                options += ","
+            options += "setgw=%s" % (ngateway)
+
+        db = Database()
+        task_ids = []
+        task_machines = []
+
+        if machine.lower() == "all":
+            for entry in db.list_machines():
+                task_machines.append(entry.label)
+        else:
+            task_machines.append(machine)
+
+        tempfilePath = request.POST.get("file_path", "")
+        print "AJAX SUBMIT FILE TAMP FILE PATH %s" % tempfilePath
+        if tempfilePath:
+            for entry in task_machines:
+                print "AJAX LIST MACHINE NAME %s" % entry
+                task_ids_new = db.demux_sample_and_add_to_db(file_path=tempfilePath, package=package, timeout=timeout, options=options, priority=priority,
+                                                         machine=entry, custom=custom, memory=memory, enforce_timeout=enforce_timeout, tags=tags, clock=clock, user_status=user_status, user_id=user_id)
+            #pp.pprint(task_ids_new)
+            final_task_ids=[]
+            for taskId in task_ids_new:
+                final_task_ids.append(until.encrpt(taskId))
+            task_ids.extend(final_task_ids)
+
+            tasks_count = len(task_ids)
+            pp.pprint(task_ids)
+            # task_ids = ["YXNkZmRzZmFkc2YxMTVkc2Zhc2RmYXNkZg=="]
+            # tasks_count = 1
+            if tasks_count > 0:
+                return HttpResponse(json.dumps({"correct": "%s" % task_ids[0]}), content_type="application/json")
+            else:
+                return HttpResponse(json.dumps({"error": "Error adding task to Cuckoo's database."}), content_type="application/json")
+        else:
+            return HttpResponse(json.dumps({"error": "Error adding task to Cuckoo's database."}), content_type="application/json")
 
 def status(request, task_id):
     print task_id

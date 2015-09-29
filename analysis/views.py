@@ -66,8 +66,8 @@ def index(request, page=1):
         page = 1
     off = (page - 1) * TASK_LIMIT
 
-    tasks_files = db.list_tasks(limit=TASK_LIMIT, offset=off, category="file", status="reported")
-    tasks_urls = db.list_tasks(limit=TASK_LIMIT, offset=off, category="url", status="reported")
+    tasks_files = db.list_tasks(limit=TASK_LIMIT, offset=off, category="file", status="reported", user_status=0)
+    tasks_urls = db.list_tasks(limit=TASK_LIMIT, offset=off, category="url", status="reported", user_status=0)
     analyses_files = []
     analyses_urls = []
 
