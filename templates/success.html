@@ -6,6 +6,6 @@
 {% for task in tasks %}
     <a href="{% url "submission.views.status" task %}">{{task}}</a>
 {% endfor %}.
-请点击链接查看扫描任务进度，登陆用户可以随时在 我的扫描 页面监控个人扫描任务状态.
+请点击链接查看扫描任务进度，登陆用户可以随时在 <a href="{% url "analysis.views.pending" %}">我的扫描</a> 页面监控个人扫描任务状态.
 </div>
 {% endblock %}

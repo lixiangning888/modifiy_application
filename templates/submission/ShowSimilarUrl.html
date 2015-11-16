@@ -47,7 +47,7 @@
 
 
 <div class="alert alert-info" style="text-align: center;font-size: 22px;">
-     此文件已存在于样本库，如需继续扫描请点击下面分析按钮。
+     此URL已存在于样本库，如需继续扫描请点击下面分析按钮。
     <div class="row">
         <div class="col-xs-12">
             <div class="right">
@@ -96,7 +96,7 @@
         </td>
         <td>
             <a href="{% url "analysis.views.report" task.base64 %}">
-              {{task.filename}}
+              {{task.url}}
             </a>
         </td>
 
@@ -113,7 +113,7 @@ function analysis() {
     //$.post("/submit/submit_file/", {{ params|safe }}, function(status){alert(status);});
 
     $.ajax({
-        url:"/submit/ajax_submit_file/",
+        url:"/submit/ajax_submit_url/",
         method: "POST",
         data: {{ params|safe }},
         dataType: "json",

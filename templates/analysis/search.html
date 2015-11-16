@@ -149,7 +149,7 @@
                     <th width="5%">反病毒引擎</th>
                     {% endif %}
                     <th width="5%">魔盾分数</th>
-                    <th width="6%" style="text-align: right;">Status</th>
+                    <th width="6%" style="text-align: right;">状态</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -205,7 +205,7 @@
                             {% if analysis.virustotal_summary %}
                                 <span class="mono">{{analysis.virustotal_summary}}</span>
                             {% else %}
-                                <span class="mono">None</span>
+                                <span class="mono">无结果</span>
                             {% endif %}
                         </td>
                         {% endif %}
@@ -224,16 +224,16 @@
                                 {% endif %}
                                 >{{analysis.malscore|floatformat:1}}</span>
                             {% else %}
-                                <span class="mono">None</span>
+                                <span class="mono">无结果</span>
                             {% endif %}
                         </td>
                         <td style="text-align: right;">
                             {% if analysis.status == "pending" %}
-                                <span class="text-muted">pending</span>
+                                <span class="text-muted">p队列中/span>
                             {% elif analysis.status == "running" %}
-                                <span class="text-warning">running</span>
+                                <span class="text-warning">运行中</span>
                             {% elif analysis.status == "completed" %}
-                                <span class="text-info">processing</span>
+                                <span class="text-info"></span>
                             {% elif analysis.status == "reported" %}
                                 {% if analysis.errors %}
                                     <span class="text-danger">
@@ -241,7 +241,7 @@
                                     <span class="text-success">
                                 {% endif%}
 
-                                reported</span>
+                                    已生成报告</span>
                             {% else %}
                                 <span class="text-danger">{{analysis.status}}</span>
                             {% endif %}

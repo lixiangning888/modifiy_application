@@ -35,9 +35,12 @@ def timestamp(dt):
 @require_safe
 def index(request):
     db = Database()
+    total_file=results_db.analysis.aggregate([{"$group":{"_id":"$target.file.md5","count":{"$sum":1}}}])
+    total_url=results_db.analysis.aggregate([{"$group":{"_id":"$target.url","count":{"$sum":1}}}])
     report = dict(
-        total_file=results_db.analysis.find({'info.category':'file'}).count(),
-        total_url=results_db.analysis.find({'info.category':'url'}).count(),
+        #total_file=results_db.analysis.find({'info.category':'file'}).count(),
+        total_file=len(list(total_file))-1,
+        total_url=len(list(total_url))-1,
         recent_files=results_db.analysis.find({'info.category':'file'},{"target":1,"malscore":1},sort=[("info.ended", pymongo.DESCENDING)]).limit(10),
         recent_urls=results_db.analysis.find({'info.category':'url'},{"target":1,"malscore":1},sort=[("info.ended", pymongo.DESCENDING)]).limit(10),
         total_samples=db.count_samples(),
@@ -46,6 +49,8 @@ def index(request):
         estimate_hour=None,
         estimate_day=None
     )
+
+    #pp.pprint(len(list(total_file)))
 
     states = (
         TASK_PENDING,

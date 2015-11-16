@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+<div class="col-sm-3"></div>
+<div class="col-sm-6">
+
+{% if error %}
+<div class="alert alert-danger"> {{error}} </div>
+{% endif %}
+
+<fieldset>
+      <div id="legend" class="center">
+        <legend class="">确认邮箱</legend>
+      </div>
+<form class="form-horizontal" method="post" role="form" action="/user/sentemail/">
+{% csrf_token %}
+      <div class="form-group">
+          <label class="control-label col-sm-6" for="email">安全邮箱:</label>
+          <div class="col-sm-6">
+             <input type="hidden" name="email" placeholder="安全邮箱" class="form-control" value="{{ user_info.email }}">
+             <p class="help-block">{{ user_info.email }}</p>
+          </div>
+      </div>
+
+      <div class="form-group">
+            <!-- Button -->
+            <div class="col-sm-3"></div>
+            <div class="col-sm-5">
+              <button id="submit" class="btn btn-success">确定重置密码</button>
+            </div>
+            <div class="col-sm-3"></div>
+      </div>
+</form>
+</fieldset>
+</div>
+<div class="col-sm-3"></div>
+</div>
+
+{% endblock %}

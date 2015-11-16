@@ -23,4 +23,5 @@ urlpatterns = patterns("",
     url(r"logout/$", "django.contrib.auth.views.logout"),
     url(r"^user/", include("account.urls")),
     url(r"^site_management/", admin.site.urls),
+    url(r"^captcha/", include('captcha.urls')),
 )

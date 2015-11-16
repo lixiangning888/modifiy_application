@@ -33,19 +33,31 @@ def left(request, left_id):
     else:
         if "info" in left:
            left["info"]["base64id"] = left_id
-    print decrpt_task_id
-    print left["target"]["file"]["md5"]
-    # Select all analyses with same file hash.
-    records = results_db.analysis.find(
-        {
-            "$and": [
-                {"target.file.md5": left["target"]["file"]["md5"]},
-                {"info.id": {"$ne": int(decrpt_task_id)}}
-            ]
-        },
-        {"target": 1, "info": 1}
-    )
-    
+
+    if left["target"]["category"] == "url":
+       records = results_db.analysis.find(
+            {
+                "$and": [
+                    {"target.url": left["target"]["url"]},
+                    {"info.id": {"$ne": int(decrpt_task_id)}}
+                ]
+            },
+            {"target": 1, "info": 1}
+        )
+    else:   	
+      #print decrpt_task_id
+      #print left["target"]["file"]["md5"]
+      #Select all analyses with same file hash.
+      records = results_db.analysis.find(
+          {
+              "$and": [
+                  {"target.file.md5": left["target"]["file"]["md5"]},
+                  {"info.id": {"$ne": int(decrpt_task_id)}}
+              ]
+          },
+          {"target": 1, "info": 1}
+      )
+      
     compare_element = []
 
     for single_record in records:

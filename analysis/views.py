@@ -1,4 +1,4 @@
-# Copyright (C) 2010-2015 Cuckoo Foundation.
+﻿# Copyright (C) 2010-2015 Cuckoo Foundation.
 # This file is part of Cuckoo Sandbox - http://www.cuckoosandbox.org
 # See the file 'docs/LICENSE' for copying permission.
 
@@ -349,6 +349,30 @@ def report(request, task_id):
     #if task_id != "pending":
     decrpt_task_id = until.decrpt(task_id)
     print "decrpt_task_id:" + decrpt_task_id
+    #print "user id" + request.user.id
+    
+    if request.user.is_authenticated():
+       checkprviate = Database().list_tasks(taskid=decrpt_task_id, not_this_user=request.user.id)
+       print "logined"
+       pp.pprint(checkprviate)
+       if len(checkprviate)>0:
+           return render_to_response("error.html",
+                                     {"error": "无权访问，此扫描结果为用户隐私！！！"},
+                                     context_instance=RequestContext(request))
+    if not request.user.is_authenticated():
+       checkprviate = Database().list_tasks(taskid=decrpt_task_id, user_status=0)
+       print "not login"
+       pp.pprint(checkprviate)
+       if len(checkprviate)==0:
+           return render_to_response("error.html",
+                                     {"error": "无权访问，此扫描结果为用户隐私！！！"},
+                                     context_instance=RequestContext(request))
+
+    
+    pp.pprint(checkprviate)
+
+
+
     report = results_db.analysis.find_one({"info.id": int(decrpt_task_id)}, sort=[("_id", pymongo.DESCENDING)])
     if not report:
         return render_to_response("error.html",
@@ -602,48 +626,50 @@ def search(request):
         db = Database()
         analyses = []
         for result in records:
-            new = db.view_task(result["info"]["id"])
-
-            if not new:
+            #new1 = db.view_task(result["info"]["id"])
+            new = db.list_tasks(taskid=result["info"]["id"], this_user_union_public=request.user.id)
+            #pp.pprint(new1)
+            #pp.pprint(new)
+            if len(new)==0:
                 continue
 
-            new = new.to_dict()
-	    
-	    if result["info"]["id"]:
-		new["base64"] = until.encrpt(result["info"]["id"])	
+            new = new[0].to_dict()
+        
+            if result["info"]["id"]:
+                new["base64"] = until.encrpt(result["info"]["id"])  
 
-            if result["info"]["category"] == "file":
-                if new["sample_id"]:
-                    sample = db.view_sample(new["sample_id"])
-                    if sample:
-                        new["sample"] = sample.to_dict()
-                filename = os.path.basename(new["target"])
-                new.update({"filename": filename})
+                if result["info"]["category"] == "file":
+                    if new["sample_id"]:
+                        sample = db.view_sample(new["sample_id"])
+                        if sample:
+                            new["sample"] = sample.to_dict()
+                    filename = os.path.basename(new["target"])
+                    new.update({"filename": filename})
 
-            rtmp = results_db.analysis.find_one({"info.id": int(new["id"])},{"virustotal_summary": 1, "malscore": 1, "malfamily": 1, "suri_tls_cnt": 1, "suri_alert_cnt": 1, "suri_http_cnt": 1, "suri_file_cnt": 1, "mlist_cnt": 1},sort=[("_id", pymongo.DESCENDING)])
-            if rtmp:
-                if rtmp.has_key("virustotal_summary") and rtmp["virustotal_summary"]:
-                    new["virustotal_summary"] = rtmp["virustotal_summary"]
-                if rtmp.has_key("suri_tls_cnt") and rtmp["suri_tls_cnt"]:
-                    new["suri_tls_cnt"] = rtmp["suri_tls_cnt"]
-                if rtmp.has_key("suri_alert_cnt") and rtmp["suri_alert_cnt"]:
-                    new["suri_alert_cnt"] = rtmp["suri_alert_cnt"]
-                if rtmp.has_key("suri_file_cnt") and rtmp["suri_file_cnt"]:
-                    new["suri_file_cnt"] = rtmp["suri_file_cnt"]
-                if rtmp.has_key("suri_http_cnt") and rtmp["suri_http_cnt"]:
-                    new["suri_http_cnt"] = rtmp["suri_http_cnt"]
-                if rtmp.has_key("mlist_cnt") and rtmp["mlist_cnt"]:
-                    new["mlist_cnt"] = rtmp["mlist_cnt"]
-                if rtmp.has_key("malscore"):
-                    new["malscore"] = rtmp["malscore"]
-                if rtmp.has_key("malfamily") and rtmp["malfamily"]:
-                    new["malfamily"] = rtmp["malfamily"]
+                rtmp = results_db.analysis.find_one({"info.id": int(new["id"])},{"virustotal_summary": 1, "malscore": 1, "malfamily": 1, "suri_tls_cnt": 1, "suri_alert_cnt": 1, "suri_http_cnt": 1, "suri_file_cnt": 1, "mlist_cnt": 1},sort=[("_id", pymongo.DESCENDING)])
+                if rtmp:
+                    if rtmp.has_key("virustotal_summary") and rtmp["virustotal_summary"]:
+                        new["virustotal_summary"] = rtmp["virustotal_summary"]
+                    if rtmp.has_key("suri_tls_cnt") and rtmp["suri_tls_cnt"]:
+                        new["suri_tls_cnt"] = rtmp["suri_tls_cnt"]
+                    if rtmp.has_key("suri_alert_cnt") and rtmp["suri_alert_cnt"]:
+                        new["suri_alert_cnt"] = rtmp["suri_alert_cnt"]
+                    if rtmp.has_key("suri_file_cnt") and rtmp["suri_file_cnt"]:
+                        new["suri_file_cnt"] = rtmp["suri_file_cnt"]
+                    if rtmp.has_key("suri_http_cnt") and rtmp["suri_http_cnt"]:
+                        new["suri_http_cnt"] = rtmp["suri_http_cnt"]
+                    if rtmp.has_key("mlist_cnt") and rtmp["mlist_cnt"]:
+                        new["mlist_cnt"] = rtmp["mlist_cnt"]
+                    if rtmp.has_key("malscore"):
+                        new["malscore"] = rtmp["malscore"]
+                    if rtmp.has_key("malfamily") and rtmp["malfamily"]:
+                        new["malfamily"] = rtmp["malfamily"]
 
-            if settings.MOLOCH_ENABLED:
-                if settings.MOLOCH_BASE[-1] != "/":
-                    settings.MOLOCH_BASE = settings.MOLOCH_BASE + "/"
-                new["moloch_url"] = settings.MOLOCH_BASE + "?date=-1&expression=tags" + quote("\x3d\x3d\x22%s\x3a%s\x22" % (settings.MOLOCH_NODE,new["id"]),safe='')
-            analyses.append(new)
+                if settings.MOLOCH_ENABLED:
+                    if settings.MOLOCH_BASE[-1] != "/":
+                        settings.MOLOCH_BASE = settings.MOLOCH_BASE + "/"
+                    new["moloch_url"] = settings.MOLOCH_BASE + "?date=-1&expression=tags" + quote("\x3d\x3d\x22%s\x3a%s\x22" % (settings.MOLOCH_NODE,new["id"]),safe='')
+                analyses.append(new)
         return render_to_response("analysis/search.html",
                                   {"analyses": analyses,
                                    "config": enabledconf,

@@ -50,6 +50,13 @@
     </div>
 
     <div class="control-group">
+          <label class="col-sm-2 control-label" for="input01">验证码</label>
+          <div class="col-sm-10">
+            {{form.captcha.errors}}
+            {{form.captcha}}
+          </div>
+    </div>
+    <div class="control-group">
           <!-- Button -->
           <div class="col-sm-3"></div>
           <div class="col-sm-2">

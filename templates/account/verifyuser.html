@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="row">
+<div class="col-sm-3"></div>
+<div class="col-sm-6">
+
+{% if error %}
+<div class="alert alert-danger"> {{error}} </div>
+{% endif %}
+
+<fieldset>
+      <div id="legend" class="center">
+        <legend class="">忘记密码</legend>
+      </div>
+<form class="form-horizontal" method="post" role="form">
+{% csrf_token %}
+      <div class="form-group">
+          <label class="control-label col-sm-6" for="username">用户名:</label>
+          <div class="col-sm-6">
+             {{ form.username }}
+             <p class="help-block"></p>
+          </div>
+      </div>
+
+      <div class="form-group">
+            <!-- Button -->
+            <div class="col-sm-3"></div>
+            <div class="col-sm-5">
+              <button id="submit" class="btn btn-success">发送重置邮件</button>
+            </div>
+            <div class="col-sm-3"></div>
+      </div>
+</form>
+</fieldset>
+</div>
+<div class="col-sm-3"></div>
+</div>
+<script type="text/javascript">
+  $('#submit').click(function(){
+   var username = $("input[name='username']").val();
+   if(username==""){
+        $("p")[0].innerHTML="用户名不能为空!";
+        $($(".form-group")[0]).addClass('has-error');
+        return false;
+   } else {
+        $(".form-horizontal").submit();
+   } 
+  });
+</script>
+
+{% endblock %}
+

@@ -170,6 +170,7 @@ INSTALLED_APPS = (
     'technique',
     'aboutus',
     'account',
+    'captcha',
 )
 
 LOGIN_REDIRECT_URL = "/"
